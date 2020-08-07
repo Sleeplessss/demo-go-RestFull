@@ -1,10 +1,10 @@
 package main
 
-import ( "restfull/router" )
+import ( "restfull/routers/handlers" )
 
 func main() {
 
-	router := router.Router()
+	router := handler.Router()
 
 	router.Run(":3000") // Run server
 }
