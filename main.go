@@ -1,6 +1,6 @@
 package main
 
-import ( "restfull/routers/handlers" )
+import ( "restfull/handler" )
 
 func main() {
 
