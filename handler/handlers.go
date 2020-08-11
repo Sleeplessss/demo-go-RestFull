@@ -9,11 +9,12 @@ import (
 func Router() *gin.Engine {
 
 	router := gin.Default()
-
-	router.GET("/", controllers.GetHelloWorld)
-	router.POST("/", controllers.PostAPI)
-	router.PUT("/path/:username", controllers.PutPathParameter)
-	router.DELETE("/query", controllers.DeleteQuery)
-
+	v1 := router.Group("/v1")
+	{
+		v1.GET("/", controllers.GetHelloWorld)
+		v1.POST("/", controllers.PostAPI)
+		v1.PUT("/", controllers.PutPathParameter)
+		v1.DELETE("/", controllers.DeleteQuery)
+	}
 	return router
 }

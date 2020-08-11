@@ -1,9 +1,9 @@
 package configs
 
 import (
-	"log"
-	"fmt"
 	"context"
+	"fmt"
+	"log"
 	"os"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -33,18 +33,19 @@ func ConnectionMongoDB() {
 }
 
 // GetClient for connect db
-func GetClient() (*mongo.Client, error)  {
+func GetClient() (*mongo.Client, error) {
 
 	// config client for connect to db
-	clientOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:27017", os.Getenv("MONGO_HOST"))).
-  SetAuth(options.Credential{
-    AuthSource: fmt.Sprintf("%s", os.Getenv("MONGO_DBNAME")), Username: fmt.Sprintf("%s", os.Getenv("MONGO_USERNAME")), Password: fmt.Sprintf("%s", os.Getenv("MONGO_PASSWORD")),
-	})
-
+	// clientOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:27017", os.Getenv("MONGO_HOST"))).
+	// 	SetAuth(options.Credential{
+	// 		AuthSource: fmt.Sprintf("%s", os.Getenv("MONGO_DBNAME")), Username: fmt.Sprintf("%s", os.Getenv("MONGO_USERNAME")), Password: fmt.Sprintf("%s", os.Getenv("MONGO_PASSWORD")),
+	// 	})
+	client, err := mongo.NewClient(options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%s@%s:27017/?authSource=%s&readPreference=primary", os.Getenv("MONGO_USERNAME"), os.Getenv("MONGO_PASSWORD"), os.Getenv("MONGO_HOST"), os.Getenv("MONGO_DBNAME"))))
 	// Connect to MongoDB
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-	
-	if err != nil{
+	// client, err := mongo.Connect(context.TODO(), clientOptions)
+	err = client.Connect(context.TODO())
+
+	if err != nil {
 		fmt.Println("Error GetClient")
 		log.Fatal(err)
 	}
@@ -60,7 +61,7 @@ func GetClient() (*mongo.Client, error)  {
 }
 
 // CheckConnection ..
-// func CheckConnection(client *mongo.Client) error  {
+// func CheckConnection(client *mongo.Client) error {
 // 	errConnection := client.Ping(context.TODO(), nil)
 // 	if errConnection != nil {
 // 		fmt.Println("Error CheckConnection")
@@ -71,9 +72,9 @@ func GetClient() (*mongo.Client, error)  {
 // }
 
 // DisconnectMongoDB ..
-func DisconnectMongoDB()  {
+func DisconnectMongoDB() {
 	err := ClientMongoDB.Disconnect(context.TODO())
-	if err != nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("Connection to MongoDB is Closed.")

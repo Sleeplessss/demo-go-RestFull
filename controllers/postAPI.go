@@ -12,9 +12,7 @@ import (
 // PostAPI func
 func PostAPI(c *gin.Context) {
 
-	/*
-		connect to db
-	*/
+	// connect to db
 	configs.ConnectionMongoDB()
 
 	u := new(models.User)
